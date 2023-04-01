@@ -38,8 +38,11 @@
 
 <script setup>
 
+import { useToast } from "vue-toastification";
+
 const errors = ref([])
 const loading = ref(false)
+const toast = useToast();
 
 const formData = reactive({
     name: "",
@@ -59,9 +62,9 @@ async function register(){
                 body: formData
             }
         )
-        console.log(user);
+        toast.success("You registered successfully !")
+        return navigateTo('/')
     } catch (error) {
-        // console.log(Object.values(error.data.data).flat(), 'Error');
         errors.value = Object.values(error.data.data).flat()
     } finally {
         loading.value = false

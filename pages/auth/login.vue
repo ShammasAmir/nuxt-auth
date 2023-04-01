@@ -28,6 +28,8 @@
 
 <script setup>
 
+import { useToast } from "vue-toastification";
+
 const errors = ref([])
 const loading = ref(false)
 
@@ -35,6 +37,8 @@ const formData = reactive({
     email: "",
     password: ""
 });
+
+const toast = useToast();
 
 async function login(){
     try {
@@ -46,8 +50,8 @@ async function login(){
                 body: formData
             }
         )
-        console.log(user);
-        // return navigateTo('/')
+        toast.success("You logged in successfully !")
+        return navigateTo('/')
     } catch (error) {
         errors.value = Object.values(error.data.data).flat()
     } finally {
