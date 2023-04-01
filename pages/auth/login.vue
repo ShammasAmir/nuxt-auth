@@ -16,8 +16,9 @@
                         <label htmlFor="password" class="form-label">Password</label>
                         <input type="password" v-model="formData.password" class="form-control" id="password" />
                     </div>
-                    <button class="btn btn-primary">
+                    <button :disabled="loading" class="btn btn-primary">
                         Login
+                        <div v-if="loading" class="spinner-border spinner-border-sm ms-2"></div>
                     </button>
                 </form>
             </div>
@@ -28,6 +29,7 @@
 <script setup>
 
 const errors = ref([])
+const loading = ref(false)
 
 const formData = reactive({
     email: "",
@@ -36,6 +38,7 @@ const formData = reactive({
 
 async function login(){
     try {
+        loading.value = true
         const user = await $fetch(
             '/api/auth/login',
             {
@@ -47,6 +50,8 @@ async function login(){
         // return navigateTo('/')
     } catch (error) {
         errors.value = Object.values(error.data.data).flat()
+    } finally {
+        loading.value = false
     }
 }
 

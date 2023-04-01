@@ -28,6 +28,7 @@
                     </div>
                     <button class="btn btn-primary">
                         Register
+                        <div v-if="loading" class="spinner-border spinner-border-sm ms-2"></div>
                     </button>
                 </form>
             </div>
@@ -38,6 +39,7 @@
 <script setup>
 
 const errors = ref([])
+const loading = ref(false)
 
 const formData = reactive({
     name: "",
@@ -49,6 +51,7 @@ const formData = reactive({
 async function register(){
 
     try {
+        loading.value = true
         const user = await $fetch(
             '/api/auth/register',
             {
@@ -60,6 +63,8 @@ async function register(){
     } catch (error) {
         // console.log(Object.values(error.data.data).flat(), 'Error');
         errors.value = Object.values(error.data.data).flat()
+    } finally {
+        loading.value = false
     }
 }
 
